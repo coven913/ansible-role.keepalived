@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  role_name:
+  author:
+  description:
+  company: "Coven 913"
+  license: "AGPL-3.0"
+  min_ansible_version:
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+        - bookworm
+
+dependencies:
+# roles this role depends on go here. these are always run before this role, when this role is specified in a playbook.

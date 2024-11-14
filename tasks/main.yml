@@ -1,0 +1,8 @@
+---
+# conditionally import a task
+- import_tasks: tasks.yml
+  when: ansible_os_family == 'Debian'
+
+# run a list of tasks in a loop
+- include_tasks: tasks.yml
+  loop: "{{ some_var }}"

@@ -1,0 +1,8 @@
+*.retry
+*.swp
+.cache*
+.DS_Store
+.pytho*
+.venv
+.vscode/*
+__pycache__

@@ -1,0 +1,8 @@
+# the maintainer(s) shall be specified here, like so:
+# * maintainer@example.com
+# you can also specify an entire team like so (teams must exist in github org already ):
+# * @org/team
+# to ensure only specific files are submitted to someone for review, you can use standard git patterns:
+# /src/ @org/team
+# to exclude files entirely from review requirements, specify them without an owner, like so:
+# /output/

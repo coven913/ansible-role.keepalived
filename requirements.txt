@@ -1,0 +1,1 @@
+# enter version pinned python dependencies here, to allow users of the role to copy them to their projects requirements.txt
