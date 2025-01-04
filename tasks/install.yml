@@ -10,7 +10,7 @@
       - libipset-dev
 
 - name: Add ipvs kernel module
-  when: keepalived__virtual_servers is defined
+  when: keepalived_virtual_servers is defined
   block:
     - name: Enable ipvs module
       community.general.modprobe:

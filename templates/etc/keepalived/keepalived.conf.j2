@@ -10,8 +10,8 @@ global_defs {
     enable_script_security
     script_user root
 }
-{% if keepalived__sync_groups is defined %}
-{% for name, sync_group in keepalived__sync_groups.items() %}
+{% if keepalived_sync_groups is defined %}
+{% for name, sync_group in keepalived_sync_groups.items() %}
 vrrp_sync_group {{ name }} {
   group {
     {% for instance in sync_group.instances %}
@@ -34,8 +34,8 @@ vrrp_sync_group {{ name }} {
 {% endfor %}
 {% endif %}
 
-{% if keepalived__scripts is defined %}
-{% for name, details in keepalived__scripts.items() %}
+{% if keepalived_scripts is defined %}
+{% for name, details in keepalived_scripts.items() %}
 vrrp_script {{ name }} {
   script "{{ details.check_script }}"
   interval {{ details.interval | default(5) }}   # checking every {{ details.interval | default(5) }} seconds (default: 5 seconds)
@@ -51,7 +51,7 @@ vrrp_script {{ name }} {
 {% endfor %}
 {% endif %}
 
-{% for name, instance in keepalived__instances.items() %}
+{% for name, instance in keepalived_instances.items() %}
 vrrp_instance {{ name }} {
   interface {{ instance.interface }}
   state {{ instance.state }}
@@ -73,12 +73,12 @@ vrrp_instance {{ name }} {
   }
   {% endif %}
   {% if instance.unicast_src_ip is defined and instance.unicast_peers|length > 0 %}
-  unicast_src_ip {{ hostvars[inventory_hostname]['ansible_'~keepalived__vrrp_interface].ipv4.address }}
+  unicast_src_ip {{ hostvars[inventory_hostname]['ansible_'~keepalived_vrrp_interface].ipv4.address }}
   unicast_peer {
   {% if instance.unicast_peers.group is defined %}
   {% for host in groups[instance.unicast_peers.group] %}
   {% if inventory_hostname != host %}
-    {{ hostvars[host]['ansible_'~keepalived__vrrp_interface].ipv4.address }}
+    {{ hostvars[host]['ansible_'~keepalived_vrrp_interface].ipv4.address }}
   {% endif %}
   {% endfor %}
   {% elif instance.unicast_peers.servers is defined %}
@@ -90,7 +90,7 @@ vrrp_instance {{ name }} {
   {% endif %}
   virtual_ipaddress {
     {% for vip in instance.vips %}
-    {{ vip }} dev {{ keepalived__vrrp_interface }}
+    {{ vip }} dev {{ keepalived_vrrp_interface }}
     {% endfor %}
   }
   {% if instance.virtual_routes is defined %}
@@ -135,8 +135,8 @@ vrrp_instance {{ name }} {
 }
 {% endfor %}
 
-{% if keepalived__virtual_servers is defined %}
-{% for vserver in keepalived__virtual_servers %}
+{% if keepalived_virtual_servers is defined %}
+{% for vserver in keepalived_virtual_servers %}
 virtual_server {{ vserver.ip }} {{ vserver.port }} {
   ip_family {{ vserver.ip_family | default('inet') }}
   {% if vserver.delay_loop is defined %}

@@ -6,9 +6,9 @@
     enabled: yes
 
 - name: stop dummy interface
-  shell: "ip link set dummy{{ keepalived__dummy_number }} down"
+  shell: "ip link set dummy{{ keepalived_dummy_number }} down"
   listen: restart dummy interface
 
 - name: start dummy interface
-  shell: "ip link set dummy{{ keepalived__dummy_number }} up"
+  shell: "ip link set dummy{{ keepalived_dummy_number }} up"
   listen: restart dummy interface

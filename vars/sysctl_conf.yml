@@ -1,4 +1,4 @@
-keepalived__sysctl_conf:
+keepalived_sysctl_conf:
 # Allow consuming apps to bind on non local addresses
   net.ipv4.ip_nonlocal_bind: 1
   net.ipv4.conf.default.rp_filter: 0

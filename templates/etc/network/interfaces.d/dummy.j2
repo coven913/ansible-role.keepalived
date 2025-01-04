@@ -1,4 +1,4 @@
 # {{ ansible_managed }}
-auto dummy{{ keepalived__dummy_number }}
-iface dummy{{ keepalived__dummy_number }} inet manual
-  pre-up /sbin/ip link add dummy{{ keepalived__dummy_number }} type dummy; /sbin/ip link set dev dummy{{ keepalived__dummy_number }} up
+auto dummy{{ keepalived_dummy_number }}
+iface dummy{{ keepalived_dummy_number }} inet manual
+  pre-up /sbin/ip link add dummy{{ keepalived_dummy_number }} type dummy; /sbin/ip link set dev dummy{{ keepalived_dummy_number }} up
