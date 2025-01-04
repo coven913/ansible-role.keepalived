@@ -1,2 +1,17 @@
 ---
-# default variable values are defined here
+keepalived__vrrp_interface: "{{ ansible_default_ipv4.interface }}"
+keepalived__dummy_number: 0
+keepalived__global_state: "MASTER"
+keepalived__global_prio: 100
+keepalived__instances:
+  default:
+    interface: "{{ keepalived__vrrp_interface }}"
+    track_interfaces:
+      - "{{ keepalived__vrrp_interface }}"
+      - dummy0
+    state: "{{ keepalived__global_state }}"
+    virtual_router_id: 1
+    priority: "{{ keepalived__global_prio }}"
+    smtp_alert: no
+    vips:
+      - "192.168.33.2/24 dev {{ keepalived__vrrp_interface }}"

@@ -1,0 +1,36 @@
+---
+- name: Install apt requirements
+  ansible.builtin.apt:
+    state: present
+    update_cache: true
+    install_recommends: false
+    name:
+      - keepalived
+      - psmisc
+      - libipset-dev
+
+- name: Add ipvs kernel module
+  when: keepalived__virtual_servers is defined
+  block:
+    - name: Enable ipvs module
+      community.general.modprobe:
+        name: ip_vs
+        state: present
+        persistent: present
+    - name: Configure ipvs
+      ansible.builtin.copy:
+        src: ipvs.conf
+        dest: /etc/modprobe.d/ipvs.conf
+      changed_when: false
+
+- name: Add dummy module
+  community.general.modprobe:
+    name: dummy
+    state: present
+    params: "numdummies=1"
+
+- name: Configure dummy module
+  ansible.builtin.template:
+    src: "etc/modules-load.d/dummy.conf.j2"
+    dest: "/etc/modules-load.d/dummy.conf"
+    mode: "u+rwx"
