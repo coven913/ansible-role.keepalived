@@ -1,0 +1,59 @@
+- name: Configure | Tune sysctl parameters
+  when: ansible_virtualization_role == "guest"
+  block:
+    - name: Configure | Load sysctl parameters
+      ansible.builtin.include_vars: sysctl_conf.yml
+
+    - name: Configure | Tune sysctl parameters
+      ansible.posix.sysctl:
+        name: '{{ item.key }}'
+        value: '{{ item.value }}'
+        sysctl_set: true
+        state: present
+        reload: true
+        ignoreerrors: true
+      loop: '{{ keepalived_sysctl_conf | dict2items }}'
+
+- name: Create dummy interface config
+  block:
+    - name: Ensure interfaces.d is present
+      ansible.builtin.file:
+        path: /etc/network/interfaces.d
+        state: directory
+    - name: Create dummy interface config
+      ansible.builtin.template:
+        src: etc/network/interfaces.d/dummy.j2
+        dest: "/etc/network/interfaces.d/dummy{{ keepalived_dummy_number }}.cfg"
+      changed_when: true
+      notify: restart dummy interface # -> until vmellar finds an appropriate and clean soluation we use a task instead of an handler
+    - name: Remove obsolete dummy interface config
+      ansible.builtin.file:
+        path: "/etc/network/interfaces.d/dummy{{ keepalived_dummy_number }}"
+        state: absent
+
+- name: Create keepalived config
+  block:
+    - name: Create keepalived config
+      ansible.builtin.template:
+        src: etc/keepalived/keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+        mode: "0640"
+        backup: true
+      register: _keepalived_config_changed
+      notify: restart keepalived
+    - name: Validate keepalived config
+      ansible.builtin.shell: /usr/sbin/keepalived -t -f /tmp/keepalived.conf
+      when: _keepalived_config_changed.changed
+  rescue:
+    - name: Restore previous keepalived config
+      ansible.builtin.copy:
+        dest: /etc/keepalived/keepalived.conf
+        src: _keepalived_config_changed.backup_file
+        remote_src: true
+        mode: "0640"
+      when: _keepalived_config_changed.backup_file is defined
+  always:
+    - name: display config changes
+      ansible.builtin.debug:
+        var: _keepalived_config_changed.diff
+      when: _keepalived_config_changed.changed
