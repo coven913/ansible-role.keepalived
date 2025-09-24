@@ -1,16 +1,4 @@
-# Ansible Role: `<your role>`
-
-> remove this part start
-
-This repository provides a template for ansible roles. create a new repository based on it, named as per <naming scheme>, build and publish your role in there and include it in any ansible repository by specifying the following in `repo-root/requirements.yml`
-
-## versioning
-This repository includes a [release-please](https://github.com/googleapis/release-please-action) configuration that versions an ansible role repository as per internal versioning conventions (documentation will follow).
-Since this repository is also versioned using this configuration, please make the following changes after creating a new repository based on this template to ensure versioning works properly:
-1. remove `./CHANGELOG.md`
-2. change the version in `./.release-please-manifest.json` to `0.0.0`
-
-> remove this part end
+# Ansible Role: keepalived
 
 To include this role in your ansible repository, add the following to  `./requirements.yml` in your repository:
 
@@ -22,60 +10,89 @@ To include this role in your ansible repository, add the following to  `./requir
 
 # Description
 
-explain what your role does short and concise
-
-## Dependencies
-
-###### Ansible Roles
-+ list any roles your role depends on here, including those specified in ./meta/main.yml
-
-###### python packages
-+ list any python packages your role depends on here, including those specified in .requirements.txt
-
-###### custom ansible modules
-+ list any required costum modules that are not included in ./library here
-
-## Requirements
-
-+ list any other requirements here
+This ansible role install and configures keepalived
 
 ## Usage
 
 explain in detail how and when your role should or should not be used and describe all functions and common use cases.
 
-For complex structured variables, a codeblock outlining the schema and a separate table with variable descriptions should be added:
-
-schema for example_var:
-
-```yaml
-example_var:
-  - a_value:
-    a_list:
-      -
-    a_list_of_dicts:
-      - a_value:
-        another_value:
-```
-
 
 ## Role Variables
 
-specify all variables this role accepts here.
-Sub-sections and table columns that are not required may be ommitted.
+```yaml
+keepalived_vrrp_interface: "{{ ansible_default_ipv4.interface }}"
+keepalived_dummy_number: 0
+keepalived_global_state: "MASTER"
+keepalived_global_prio: 100
+keepalived_package: keepalived
+keepalived_version: # if this is defined, keepalived package will also be pinned to this specific version
 
-#### feature switches
-Variable | Type | Required | Default | Description/purpose
---- | --- | --- | --- | ---
+keepalived_sync_groups:
+  <name>:
+    instances:
+      - <instance>
+    notify_script:
+    notify_master:
+    notify_backup:
+    notify_fault:
 
+keepalived_scripts:
+  <name>:
+    check_script:
+    interval: 5
+    fall: 3
+    rise: 6
+    timeout:
+    weight:
 
-#### group vars
-Variable | Type | Required | Default | Description/purpose
---- | --- | --- | --- | ---
+keepalived_instances:
+  <name>:
+    interface:
+    state: "{{ keepalived_global_state }}"
+    virtual_router_id:
+    priority: "{{ keepalived_global_priority }}"
+    noopreempt: # bool
+    preempt delay: # seconds 0-1000
+    accept_mode: # bool
+    authentication_password:
+    unicast_src_ip: "{{ hostvars[inventory_hostname]['ansible_'~keepalived_vrrp_interface].ipv4.address }}"
+    unicast_peers:
+      group: #ansible group
+      servers:
+        -
+    vips:
+      - address:
+        device: "{{ keepalived_vrrp_interface }}"
+    virtual_routes:
+      - <route>
+    track_scripts:
+      - <script>
+    track_interfaces:
+      - <interface>
+    notify_script:
+    notify_master:
+    notify_backup:
+    notify_fault:
+    notify_stop:
 
-
-#### Host vars
-Variable | Type | Required | Default | Description/purpose
---- | --- | --- | --- | ---
+keepalived_virtual_servers:
+  - ip:
+    port:
+    ip_family: 'inet'
+    delay_loop:
+    lvs_sched: 'rr'
+    lvs_method: 'DR'
+    protocol: 'TCP'
+    ha_suspend: #bool
+    real_servers:
+      - ip:
+        port:
+        misc_check:
+          misc_path:
+          misc_timeout:
+          warmup:
+          misc_dynamic: bool
+```
 
 ## Example Playbook
 
@@ -88,3 +105,6 @@ provide an example of how to implement this role in a playbook. provide multiple
   roles:
     - role: my_role
 ```
+
+---
+> ℹ️ This ansible role adheres to the [Coven913 ansible role template](https://github.com/coven913/template.ansible-role).

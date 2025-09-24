@@ -1,17 +1,17 @@
----
 galaxy_info:
-  role_name:
-  author:
-  description:
-  company: "Coven 913"
+  role_name: keepalived
+  author: Valentina Mellar, Patrick Pötz, Christian Bernds
+  description: Ansible role to install and configure keepalived
+  company: Coven913
   license: "AGPL-3.0"
-  min_ansible_version:
+  min_ansible_version: "2.19.2"
   platforms:
     - name: Debian
       versions:
-        - buster
-        - bullseye
         - bookworm
 
 dependencies:
-# roles this role depends on go here. these are always run before this role, when this role is specified in a playbook.
+  - role: base
+    base_install_packages: true
+    base_configure_ssh_enable: true
+    base_configure_disks: true

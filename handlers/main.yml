@@ -1,6 +1,17 @@
 ---
-# specify tasks that should only be run when another task reports changed here:
-- name: a handler listening for a change
-  ansible.builtin.debug:
-    msg: i am a handler
-  listen: change # i am listening for "notify: change" statements
+- name: Restart keepalived
+  throttle: 1
+  ansible.builtin.service:
+    name: keepalived
+    state: restarted
+    enabled: true
+
+- name: Stop dummy interface
+  ansible.builtin.shell: "ip link set dummy{{ keepalived_dummy_number }} down"
+  listen:
+    - restart dummy interface
+    - stop dummy interface
+
+- name: Start dummy interface
+  ansible.builtin.shell: "ip link set dummy{{ keepalived_dummy_number }} up"
+  listen: restart dummy interface

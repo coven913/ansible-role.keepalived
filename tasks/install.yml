@@ -1,0 +1,41 @@
+---
+- name: Install | Version pinning
+  when: keepalived_version is defined
+  block:
+    - name: Install | Select keepalived version
+      ansible.builtin.set_fact:
+        _keepalived_package: "{{ keepalived_package }}={{ keepalived_version }}"
+
+    - name: Install | Pin keepalived package to {{ keepalived_version }}
+      ansible.builtin.template:
+        src: "etc/apt/preferences.d/keepalived.j2"
+        dest: "/etc/apt/preferences.d/keepalived"
+        mode: "0644"
+
+- name: Install | Install keepalived and dependencies
+  ansible.builtin.apt:
+    state: present
+    update_cache: true
+    install_recommends: false
+    name:
+      - psmisc
+      - libipset-dev
+      - "{{ _keepalived_package | default(keepalived_package) }}"
+
+- name: Install | Add ipvs kernel module
+  when: keepalived_virtual_servers is defined
+  block:
+    - name: Install | Enable ipvs module
+      community.general.modprobe:
+        name: ip_vs
+        state: present
+        persistent: present
+
+    - name: Install | Configure ipvs
+      ansible.builtin.copy:
+        src: ipvs.conf
+        dest: /etc/modprobe.d/ipvs.conf
+        owner: root
+        group: root
+        mode: "0644"
+      changed_when: false
