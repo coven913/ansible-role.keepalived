@@ -5,13 +5,3 @@
     name: keepalived
     state: restarted
     enabled: true
-
-- name: Stop dummy interface
-  ansible.builtin.shell: "ip link set dummy{{ keepalived_dummy_number }} down"
-  listen:
-    - restart dummy interface
-    - stop dummy interface
-
-- name: Start dummy interface
-  ansible.builtin.shell: "ip link set dummy{{ keepalived_dummy_number }} up"
-  listen: restart dummy interface

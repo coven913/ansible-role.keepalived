@@ -10,12 +10,6 @@
 - name: Install keepalived
   ansible.builtin.import_tasks: install.yml
 
-- name: Set up dummy interface
-  ansible.builtin.import_tasks: dummy_interface.yml
-  when: >-
-    keepalived_dummy_interface
-    or hostvars[host]['ansible_dummy'~keepalived_dummy_number] is defined
-
 - name: Configure
   ansible.builtin.import_tasks: configure.yml
   tags: configure

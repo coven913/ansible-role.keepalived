@@ -21,7 +21,6 @@ explain in detail how and when your role should or should not be used and descri
 
 ```yaml
 keepalived_vrrp_interface: "{{ ansible_default_ipv4.interface }}"
-keepalived_dummy_number: 0
 keepalived_global_state: "MASTER"
 keepalived_global_prio: 100
 keepalived_package: keepalived
