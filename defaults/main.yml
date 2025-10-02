@@ -1,2 +1,3 @@
 ---
-# default variable values are defined here
+keepalived_vrrp_interface: "{{ ansible_default_ipv4.interface }}"
+keepalived_package: keepalived

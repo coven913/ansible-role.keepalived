@@ -1,8 +1,15 @@
 ---
-# conditionally import a task
-- import_tasks: tasks.yml
-  when: ansible_os_family == 'Debian'
+- name: Regather network facts
+  ansible.builtin.setup:
+    gather_subset:
+      - "!all"
+      - "!min"
+      - "network"
+  tags: configure
 
-# run a list of tasks in a loop
-- include_tasks: tasks.yml
-  loop: "{{ some_var }}"
+- name: Install keepalived
+  ansible.builtin.import_tasks: install.yml
+
+- name: Configure
+  ansible.builtin.import_tasks: configure.yml
+  tags: configure
