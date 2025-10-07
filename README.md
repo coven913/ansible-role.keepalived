@@ -5,7 +5,7 @@ To include this role in your ansible repository, add the following to  `./requir
 ```yaml
 - name: <role-name>
   src: git+ssh://git@github.com/coven913/ansible-role.keepalived.git
-  version: 0.1.1 # x-release-please-version
+  version: 0.1.2 # x-release-please-version
 ```
 
 # Description
