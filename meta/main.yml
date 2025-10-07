@@ -9,9 +9,3 @@ galaxy_info:
     - name: Debian
       versions:
         - bookworm
-
-dependencies:
-  - role: base
-    base_install_packages: true
-    base_configure_ssh_enable: true
-    base_configure_disks: true
