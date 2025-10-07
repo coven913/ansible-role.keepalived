@@ -1,5 +1,5 @@
 - name: Configure | Tune sysctl parameters
-  when: ansible_virtualization_role == "guest"
+  when: keepalived_configure_kernel
   block:
     - name: Configure | Load sysctl parameters
       ansible.builtin.include_vars: sysctl_conf.yml

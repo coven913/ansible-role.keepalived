@@ -25,6 +25,7 @@ keepalived_global_state: "MASTER"
 keepalived_global_prio: 100
 keepalived_package: keepalived
 keepalived_version: # if this is defined, keepalived package will also be pinned to this specific version
+keepalived_configure_kernel: true # if this is defined, recommended kernel parameters as per /vars/sysctl_conf will be applied
 
 keepalived_sync_groups:
   <name>:

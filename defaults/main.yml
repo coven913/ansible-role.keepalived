@@ -1,3 +1,4 @@
 ---
 keepalived_vrrp_interface: "{{ ansible_default_ipv4.interface }}"
 keepalived_package: keepalived
+keepalived_configure_kernel: true
