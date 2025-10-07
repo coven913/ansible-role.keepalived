@@ -5,6 +5,7 @@
       ansible.builtin.include_vars: sysctl_conf.yml
 
     - name: Configure | Tune sysctl parameters
+      ignore_errors: true
       ansible.posix.sysctl:
         name: '{{ item.key }}'
         value: '{{ item.value }}'
