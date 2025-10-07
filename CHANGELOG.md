@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/coven913/ansible-role.keepalived/compare/0.1.0...0.1.1) (2025-10-07)
+
+
+### Bug Fixes
+
+* remove obsolete dependencies ([85d34be](https://github.com/coven913/ansible-role.keepalived/commit/85d34be117d3ee18a8951777d57649ad44b36205))
+
 ## 0.1.0 (2025-10-02)
 
 
